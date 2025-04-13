@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {OgmaAccount} from "src/OgmaAccount.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
+import {OgmaAccountFactory} from "src/OgmaAccountFactory.sol";
 
 contract OgmaAccountScript is Script {
 
@@ -11,13 +11,13 @@ contract OgmaAccountScript is Script {
         deployOgmaAccount();
     }
 
-    function deployOgmaAccount() public returns (HelperConfig, OgmaAccount) {
+    function deployOgmaAccount() public returns (HelperConfig, OgmaAccountFactory) {
         HelperConfig helperConfig = new HelperConfig();
-        (uint256 deployerKey, , address entryPoint) = helperConfig.activeNetworkConfig();
+        (uint256 deployerKey,,) = helperConfig.activeNetworkConfig();
 
         vm.startBroadcast(deployerKey);
-        OgmaAccount ogmaAccount = new OgmaAccount(entryPoint);
-        ogmaAccount.transferOwnership(msg.sender);
+        OgmaAccountFactory ogmaAccount = new OgmaAccountFactory();
+
         vm.stopBroadcast();
         return (helperConfig, ogmaAccount);
     }
